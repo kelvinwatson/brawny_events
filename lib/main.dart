@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
+import 'constants_theme.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -14,7 +16,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         title: 'BottomNavbar Demo',
         theme: ThemeData(
-          primarySwatch: Colors.indigo,
+          primarySwatch: whiteSwatch,
+          useMaterial3: true
         ),
         routes: {
           // This route needs to be registered, Because
@@ -498,7 +501,11 @@ class _HomeFeedsState extends State<HomeFeeds> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Feeds'),
+        title: Text('BRAWNY EVENTS',
+            style: Theme.of(context)
+                .textTheme
+                .displayMedium
+                ?.copyWith(fontFamily: fontAnton)),
       ),
       body: ListView.builder(
         controller: _scrollController,
