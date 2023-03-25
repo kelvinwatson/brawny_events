@@ -4,6 +4,8 @@ import 'package:flutter/rendering.dart';
 
 import 'constants_theme.dart';
 
+
+// TODO: Navigationbar elevation
 void main() {
   runApp(const MyApp());
 }
@@ -14,11 +16,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'BottomNavbar Demo',
-        theme: ThemeData(
-          primarySwatch: whiteSwatch,
-          useMaterial3: true
-        ),
+        title: 'BRAWNY EVENTS',
+        theme: ThemeData(primarySwatch: whiteSwatch, useMaterial3: true),
         routes: {
           // This route needs to be registered, Because
           //  we are pushing this on the main Navigator Stack on line 754 (isRootNavigator:true)
@@ -46,8 +45,6 @@ final homeKey = GlobalKey<NavigatorState>();
 final productsKey = GlobalKey<NavigatorState>();
 final profileKey = GlobalKey<NavigatorState>();
 final NavbarNotifier _navbarNotifier = NavbarNotifier();
-List<Color> colors = [mediumPurple, Colors.orange, Colors.teal];
-const Color mediumPurple = Color.fromRGBO(79, 0, 241, 1.0);
 const String placeHolderText =
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
 
@@ -63,11 +60,9 @@ class _NavBarHandlerState extends State<NavBarHandler>
     with SingleTickerProviderStateMixin {
   final _buildBody = const <Widget>[HomeMenu(), ProductsMenu(), ProfileMenu()];
 
-  late List<BottomNavigationBarItem> _bottomList = <BottomNavigationBarItem>[];
-
-  final menuItemlist = const <MenuItem>[
-    MenuItem(Icons.home, 'Home'),
-    MenuItem(Icons.shopping_basket, 'Products'),
+  final menuItemList = const <MenuItem>[
+    MenuItem(Icons.list, 'Browse'),
+    MenuItem(Icons.near_me, 'Explore'),
     MenuItem(Icons.person, 'Me'),
   ];
 
@@ -84,13 +79,6 @@ class _NavBarHandlerState extends State<NavBarHandler>
     fadeAnimation = Tween<double>(begin: 0.4, end: 1.0).animate(
       CurvedAnimation(parent: _controller, curve: Curves.fastOutSlowIn),
     );
-
-    _bottomList = List.generate(
-        _buildBody.length,
-        (index) => BottomNavigationBarItem(
-              icon: Icon(menuItemlist[index].iconData),
-              label: menuItemlist[index].text,
-            )).toList();
     _controller.forward();
   }
 
@@ -169,7 +157,7 @@ class _NavBarHandlerState extends State<NavBarHandler>
                             _controller.forward();
                           }
                         },
-                        menuItems: menuItemlist),
+                        menuItems: menuItemList),
                   ),
                 ],
               );
@@ -340,11 +328,10 @@ class _AnimatedNavBarState extends State<AnimatedNavBar>
                 },
                 elevation: 16.0,
                 showUnselectedLabels: true,
-                unselectedItemColor: Colors.white54,
-                selectedItemColor: Colors.white,
+                unselectedItemColor: Colors.black45,
+                selectedItemColor: Colors.black,
                 items: widget.menuItems
                     .map((MenuItem menuItem) => BottomNavigationBarItem(
-                          backgroundColor: Colors.indigo,
                           icon: Icon(menuItem.iconData),
                           label: menuItem.text,
                         ))
@@ -391,41 +378,36 @@ class ProductsMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: ThemeData(
-          colorScheme:
-              Theme.of(context).colorScheme.copyWith(primary: colors[1])),
-      child: Navigator(
-          key: productsKey,
-          initialRoute: '/',
-          onGenerateRoute: (RouteSettings settings) {
-            WidgetBuilder builder;
-            switch (settings.name) {
-              case '/':
-                builder = (BuildContext _) => const ProductList();
-                break;
-              case ProductDetail.route:
-                final id = (settings.arguments as Map)['id'];
-                builder = (BuildContext _) {
-                  return ProductDetail(
-                    id: id,
-                  );
-                };
-                break;
-              case ProductComments.route:
-                final id = (settings.arguments as Map)['id'];
-                builder = (BuildContext _) {
-                  return ProductComments(
-                    id: id,
-                  );
-                };
-                break;
-              default:
-                builder = (BuildContext _) => const ProductList();
-            }
-            return MaterialPageRoute(builder: builder, settings: settings);
-          }),
-    );
+    return Navigator(
+        key: productsKey,
+        initialRoute: '/',
+        onGenerateRoute: (RouteSettings settings) {
+          WidgetBuilder builder;
+          switch (settings.name) {
+            case '/':
+              builder = (BuildContext _) => const ProductList();
+              break;
+            case ProductDetail.route:
+              final id = (settings.arguments as Map)['id'];
+              builder = (BuildContext _) {
+                return ProductDetail(
+                  id: id,
+                );
+              };
+              break;
+            case ProductComments.route:
+              final id = (settings.arguments as Map)['id'];
+              builder = (BuildContext _) {
+                return ProductComments(
+                  id: id,
+                );
+              };
+              break;
+            default:
+              builder = (BuildContext _) => const ProductList();
+          }
+          return MaterialPageRoute(builder: builder, settings: settings);
+        });
   }
 }
 
@@ -434,28 +416,23 @@ class ProfileMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: ThemeData(
-          colorScheme:
-              Theme.of(context).colorScheme.copyWith(primary: colors[2])),
-      child: Navigator(
-          key: profileKey,
-          initialRoute: '/',
-          onGenerateRoute: (RouteSettings settings) {
-            WidgetBuilder builder;
-            switch (settings.name) {
-              case '/':
-                builder = (BuildContext _) => const UserProfile();
-                break;
-              case ProfileEdit.route:
-                builder = (BuildContext _) => const ProfileEdit();
-                break;
-              default:
-                builder = (BuildContext _) => const UserProfile();
-            }
-            return MaterialPageRoute(builder: builder, settings: settings);
-          }),
-    );
+    return Navigator(
+        key: profileKey,
+        initialRoute: '/',
+        onGenerateRoute: (RouteSettings settings) {
+          WidgetBuilder builder;
+          switch (settings.name) {
+            case '/':
+              builder = (BuildContext _) => const UserProfile();
+              break;
+            case ProfileEdit.route:
+              builder = (BuildContext _) => const ProfileEdit();
+              break;
+            default:
+              builder = (BuildContext _) => const UserProfile();
+          }
+          return MaterialPageRoute(builder: builder, settings: settings);
+        });
   }
 }
 
